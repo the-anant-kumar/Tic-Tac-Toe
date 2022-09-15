@@ -25,13 +25,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 button.setOnClickListener(this)
             }
         }
-
+        reset_game()
         reset.setOnClickListener{
-            player = true
-            turn_count = 0
-            initializeBoardStatus()
-            Turn.setText("Player X Turn")
+            reset_game()
         }
+    }
+
+    private fun reset_game(){
+        player = true
+        turn_count = 0
+        initializeBoardStatus()
+        Turn.setText("Player X Turn")
     }
     private fun initializeBoardStatus(){
         for(i in 0..2){
@@ -83,6 +87,62 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if(turn_count == 9){
             updateDisplay("Game Draw")
         }
+        checkWinner()
+    }
+
+    private fun checkWinner() {
+        //Horizontal Rows
+        for(i in 0..2){
+            if(boardStatus[i][0] == boardStatus[i][1] && boardStatus[i][0] == boardStatus[i][2]){
+                if(boardStatus[i][0] == 1){
+                    buttonDisable()
+                    updateDisplay("Player X Won")
+                    break
+                }
+                else if(boardStatus[i][0] == 0){
+                    buttonDisable()
+                    updateDisplay("Player 0 Won")
+                    break
+                }
+            }
+        }
+        //Vertical Column
+        for(i in 0..2){
+            if(boardStatus[0][i] == boardStatus[1][i] && boardStatus[0][i] == boardStatus[2][i]){
+                if(boardStatus[0][i] == 1){
+                    buttonDisable()
+                    updateDisplay("Player X Won")
+                    break
+                }
+                else if(boardStatus[0][i] == 0){
+                    buttonDisable()
+                    updateDisplay("Player 0 Won")
+                    break
+                }
+            }
+        }
+        // (0,0) -> (2,2) Diagonal
+        if(boardStatus[0][0] == boardStatus[1][1] && boardStatus[1][1] == boardStatus[2][2]){
+            if(boardStatus[0][0] == 1){
+                buttonDisable()
+                updateDisplay("Player X Won")
+            }
+            else if(boardStatus[0][0] == 0){
+                buttonDisable()
+                updateDisplay("Player 0 Won")
+            }
+        }
+        // (0,2) -> (2,0) Diagonal
+        if(boardStatus[0][2] == boardStatus[1][1] && boardStatus[1][1] == boardStatus[2][0]){
+            if(boardStatus[0][2] == 1){
+                buttonDisable()
+                updateDisplay("Player X Won")
+            }
+            else if(boardStatus[0][2] == 0){
+                buttonDisable()
+                updateDisplay("Player 0 Won")
+            }
+        }
     }
 
     private fun updateDisplay(text: String) {
@@ -97,5 +157,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             setText(text)
         }
         boardStatus[row][col] = value
+    }
+
+
+    private fun buttonDisable(){
+        for(i in 0..2){
+            for(j in 0..2){
+                board[i][j].isEnabled = false;
+            }
+        }
     }
 }
